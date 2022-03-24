@@ -8,6 +8,10 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
+enum class CODE(val code: Int) {
+    OK(0)
+}
+
 object WanNetwork {
 
     private val articleService = ServiceCreator.create(Api::class.java)
