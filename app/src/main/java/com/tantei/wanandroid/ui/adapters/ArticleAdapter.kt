@@ -1,5 +1,6 @@
 package com.tantei.wanandroid.ui.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,10 +9,24 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.tantei.wanandroid.R
 import com.tantei.wanandroid.models.Article
+import com.tantei.wanandroid.ui.fragments.ArticleListFragment
+import org.w3c.dom.Text
+import java.text.DateFormat
+import java.time.format.DateTimeFormatter
+import java.util.*
 
-class ArticleAdapter(private val fragment: Fragment, private val articleList: List<Article>) : RecyclerView.Adapter<ArticleAdapter.ViewHolder>() {
+private const val TAG = "ArticleAdapter"
+
+class ArticleAdapter(private val fragment: Fragment, private val articleList: List<Article>, val callbacks: Callbacks) : RecyclerView.Adapter<ArticleAdapter.ViewHolder>() {
+
+    interface Callbacks {
+        fun onArticleTitleClick(article: Article)
+    }
+
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val articleTitle = view.findViewById<TextView>(R.id.article_title)
+        val articleTitle: TextView = view.findViewById(R.id.article_title)
+        val shareUser: TextView = view.findViewById(R.id.shareUser)
+        val publishTime: TextView = view.findViewById(R.id.publishTime)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -22,6 +37,15 @@ class ArticleAdapter(private val fragment: Fragment, private val articleList: Li
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val article = articleList[position]
         holder.articleTitle.text = article.title
+        holder.shareUser.text = article.shareUser
+        holder.publishTime.text = DateFormat.getDateInstance().format(Date(article.publishTime))
+        
+        holder.articleTitle.setOnClickListener {
+            callbacks.onArticleTitleClick(article)
+        }
+        holder.shareUser.setOnClickListener {
+
+        }
     }
 
     override fun getItemCount(): Int {

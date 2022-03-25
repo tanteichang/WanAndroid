@@ -1,14 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.pages.HomeFragment">
+    tools:context=".ui.pages.HomeFragment"
+    android:orientation="vertical">
 
-<!--   <androidx.recyclerview.widget.RecyclerView-->
-<!--       android:id="@+id/article_list"-->
-<!--       android:layout_width="match_parent"-->
-<!--       android:layout_height="wrap_content">-->
-<!--   </androidx.recyclerview.widget.RecyclerView>-->
+   <!--Banner-->
+    <com.stx.xhb.androidx.XBanner
+        android:id="@+id/xbanner"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        />
 
-</FrameLayout>
+    <ImageView
+        android:id="@+id/image_view"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"></ImageView>
+
+   <FrameLayout
+       android:id="@+id/frame_article_list"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent" />
+
+   <FrameLayout
+       android:id="@+id/frame_article_detail"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent" />
+</LinearLayout>

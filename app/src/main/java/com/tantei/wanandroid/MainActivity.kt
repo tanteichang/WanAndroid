@@ -26,19 +26,6 @@ class MainActivity : BaseActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initBottomNavigation()
-
-        val homeService = ServiceCreator.create(Api::class.java)
-
-        homeService.fetchArticleList().enqueue(object : Callback<ArticleListResponse> {
-            override fun onFailure(call: Call<ArticleListResponse>, t: Throwable) {
-                Log.d(TAG, "onFailure: $t")
-            }
-
-            override fun onResponse(call: Call<ArticleListResponse>, response: Response<ArticleListResponse>) {
-                Log.d(TAG, "onResponse: ${response.body()?.data?.articleList}")
-            }
-        })
-
     }
 
     private fun replaceFragment(id: Int, fragment: Fragment) {

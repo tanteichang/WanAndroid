@@ -1,5 +1,6 @@
 package com.tantei.wanandroid.network
 
+import com.tantei.wanandroid.base.BaseNetwork
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -12,28 +13,11 @@ enum class CODE(val code: Int) {
     OK(0)
 }
 
-object WanNetwork {
+object WanNetwork : BaseNetwork() {
 
-    private val articleService = ServiceCreator.create(Api::class.java)
+    private val wanApiService = ServiceCreator.create(Api::class.java)
 
-    suspend fun fetchArticleList(page: Int) = articleService.fetchArticleList(page).await()
 
-    private suspend fun <T> Call<T>.await(): T {
-        return suspendCoroutine { continuation ->
-            enqueue(object : Callback<T> {
-                override fun onFailure(call: Call<T>, t: Throwable) {
-                    continuation.resumeWithException(t)
-                }
-                override fun onResponse(call: Call<T>, response: Response<T>) {
-                    val body = response.body()
-                    if (body != null) {
-                        continuation.resume(body)
-                    } else {
-                        continuation.resumeWithException(RuntimeException("response body is null"))
-                    }
-                }
-            })
-        }
-    }
-
+    suspend fun fetchArticleList(page: Int) = wanApiService.fetchArticleList(page).await()
+    suspend fun fetchBannerList() = wanApiService.fetchBanner().await()
 }
