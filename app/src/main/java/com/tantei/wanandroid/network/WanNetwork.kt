@@ -19,5 +19,6 @@ object WanNetwork : BaseNetwork() {
 
 
     suspend fun fetchArticleList(page: Int) = wanApiService.fetchArticleList(page).await()
+    suspend fun fetchTopArticleList() = wanApiService.fetchTopArticles().await()
     suspend fun fetchBannerList() = wanApiService.fetchBanner().await()
 }

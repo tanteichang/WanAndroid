@@ -1,26 +1,19 @@
-package com.tantei.wanandroid.ui.pages
+package com.tantei.wanandroid.ui.home
 
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import com.bumptech.glide.Glide
-import com.stx.xhb.androidx.XBanner
 import com.tantei.wanandroid.R
 import com.tantei.wanandroid.base.BaseFragment
 import com.tantei.wanandroid.databinding.FragmentHomeBinding
-import com.tantei.wanandroid.models.Article
-import com.tantei.wanandroid.models.Banner
-import com.tantei.wanandroid.ui.fragments.ArticleDetailFragment
-import com.tantei.wanandroid.ui.fragments.ArticleListFragment
-import com.tantei.wanandroid.viewmodels.HomeViewModel
-import kotlin.math.log
+import com.tantei.wanandroid.ui.home.bean.Article
+import com.tantei.wanandroid.ui.home.viewModel.HomeViewModel
+import com.youth.banner.adapter.BannerImageAdapter
+import com.youth.banner.holder.BannerImageHolder
 
 private const val TAG = "HomeFragment"
 
@@ -41,8 +34,9 @@ class HomeFragment : BaseFragment<HomeViewModel>() {
 
         articleListFragment = ArticleListFragment(object : ArticleListFragment.OnItemClick {
             override fun onArticleClick(article: Article) {
+                val bundle: Bundle
                 childFragmentManager.beginTransaction()
-                    .add(R.id.frame_article_list, ArticleDetailFragment())
+                    .add(R.id.frame_article_detail, ArticleDetailFragment.newInstance(article.link))
                     .addToBackStack(null)
                     .commit()
             }
@@ -60,17 +54,26 @@ class HomeFragment : BaseFragment<HomeViewModel>() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        viewModel.bannerList.observe(viewLifecycleOwner, { result ->
-            Log.d(TAG, "onViewCreated: $result")
+        viewModel.bannerList.observe(viewLifecycleOwner) { result ->
+            Log.d(TAG, "onViewCreated: ${result.getOrNull()?.get(0)?.imagePath}")
 
-            Glide.with(this@HomeFragment).load(result.getOrNull()?.get(0)?.imagePath).into(binding.imageView)
+            val imageUrls = result.getOrNull()?.map {
+                it.imagePath
+            }
 
-            binding.xbanner.loadImage(object : XBanner.XBannerAdapter{
-                override fun loadBanner(banner: XBanner?, model: Any?, view: View?, position: Int) {
-                    Glide.with(this@HomeFragment).load(result.getOrNull()?.get(0)?.imagePath).into(view as ImageView)
+            binding.homeBanner.setAdapter(object : BannerImageAdapter<String>(imageUrls) {
+                override fun onBindView(
+                    holder: BannerImageHolder?,
+                    data: String?,
+                    position: Int,
+                    size: Int
+                ) {
+                    if (holder != null) {
+                        Glide.with(this@HomeFragment).load(data).into(holder.imageView)
+                    }
                 }
             })
 
-        })
+        }
     }
 }

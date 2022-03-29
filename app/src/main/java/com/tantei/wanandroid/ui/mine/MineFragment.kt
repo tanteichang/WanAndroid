@@ -1,4 +1,4 @@
-package com.tantei.wanandroid.ui.pages
+package com.tantei.wanandroid.ui.mine
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.tantei.wanandroid.R
 import com.tantei.wanandroid.base.BaseFragment
-import com.tantei.wanandroid.viewmodels.MineViewModel
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

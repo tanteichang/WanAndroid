@@ -1,19 +1,20 @@
-package com.tantei.wanandroid.ui.fragments
+package com.tantei.wanandroid.ui.home
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tantei.wanandroid.databinding.FragmentArticleListBinding
-import com.tantei.wanandroid.models.Article
-import com.tantei.wanandroid.ui.adapters.ArticleAdapter
-import com.tantei.wanandroid.viewmodels.ArticleViewModel
+import com.tantei.wanandroid.ui.home.adapter.ArticleAdapter
+import com.tantei.wanandroid.ui.home.bean.Article
+import com.tantei.wanandroid.ui.home.viewModel.ArticleViewModel
+import com.tantei.wanandroid.viewmodels.GlobalViewModel
 
 private const val TAG = "ArticleListFragment"
 
@@ -23,7 +24,8 @@ class ArticleListFragment(val onItemClick: OnItemClick) : Fragment() {
         fun onArticleClick(article: Article)
     }
 
-    val articleViewModel by lazy { ViewModelProvider(this).get(ArticleViewModel::class.java) }
+    private val articleViewModel by lazy { ViewModelProvider(this).get(ArticleViewModel::class.java) }
+    private val globalViewModel by activityViewModels<GlobalViewModel>()
     private lateinit var adapter: ArticleAdapter
     private lateinit var binding: FragmentArticleListBinding
 
@@ -37,12 +39,13 @@ class ArticleListFragment(val onItemClick: OnItemClick) : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
         val layoutManager = LinearLayoutManager(activity)
         binding.articleList.layoutManager = layoutManager
         adapter = ArticleAdapter(this, articleViewModel.articleList, object : ArticleAdapter.Callbacks {
             override fun onArticleTitleClick(article: Article) {
                 Log.d(TAG, "onArticleTitleClick: $article")
-//                onItemClick.onArticleClick(article)
+                onItemClick.onArticleClick(article)
             }
         })
         binding.articleList.adapter = adapter
@@ -52,10 +55,26 @@ class ArticleListFragment(val onItemClick: OnItemClick) : Fragment() {
             val articleList = result.getOrNull()
             if (articleList != null) {
                 articleViewModel.articleList.clear()
-                Log.d(TAG, "onActivityCreated: add articleList ${articleList.size}")
+                Log.d(TAG, "onActivityCreated: add articleList ${articleList[0]}")
                 articleViewModel.articleList.addAll(articleList)
                 adapter.notifyDataSetChanged()
             }
         })
+
+        globalViewModel.bottomNavigationHide.observe(viewLifecycleOwner, Observer {
+            Log.d(TAG, "Fragment onActivityCreated: $it")
+        })
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.articleList.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+            val dy = binding.articleList.computeVerticalScrollOffset()
+            if (dy > 0) {
+                globalViewModel.setBottomNavigationHide(true)
+            } else {
+                globalViewModel.setBottomNavigationHide(false)
+            }
+        }
     }
 }

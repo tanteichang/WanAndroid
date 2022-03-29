@@ -1,4 +1,4 @@
-package com.tantei.wanandroid.models
+package com.tantei.wanandroid.ui.home.bean
 
 data class BannerListResponse (
     val data: List<Banner>,

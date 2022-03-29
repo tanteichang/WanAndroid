@@ -1,6 +1,5 @@
-package com.tantei.wanandroid.ui.adapters
+package com.tantei.wanandroid.ui.home.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,11 +7,8 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.tantei.wanandroid.R
-import com.tantei.wanandroid.models.Article
-import com.tantei.wanandroid.ui.fragments.ArticleListFragment
-import org.w3c.dom.Text
+import com.tantei.wanandroid.ui.home.bean.Article
 import java.text.DateFormat
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 private const val TAG = "ArticleAdapter"
@@ -39,7 +35,7 @@ class ArticleAdapter(private val fragment: Fragment, private val articleList: Li
         holder.articleTitle.text = article.title
         holder.shareUser.text = article.shareUser
         holder.publishTime.text = DateFormat.getDateInstance().format(Date(article.publishTime))
-        
+
         holder.articleTitle.setOnClickListener {
             callbacks.onArticleTitleClick(article)
         }

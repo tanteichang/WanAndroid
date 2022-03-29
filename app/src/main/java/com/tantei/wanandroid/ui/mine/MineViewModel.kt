@@ -1,4 +1,4 @@
-package com.tantei.wanandroid.viewmodels
+package com.tantei.wanandroid.ui.mine
 
 import com.tantei.wanandroid.base.BaseViewModel
 
