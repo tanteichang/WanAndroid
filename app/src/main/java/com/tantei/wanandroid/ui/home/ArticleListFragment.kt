@@ -18,6 +18,7 @@ import com.tantei.wanandroid.databinding.FragmentArticleListBinding
 import com.tantei.wanandroid.ui.home.adapter.ArticleAdapter
 import com.tantei.wanandroid.ui.home.bean.Article
 import com.tantei.wanandroid.ui.home.viewModel.ArticleViewModel
+import com.tantei.wanandroid.ui.web.WebFragment
 import com.tantei.wanandroid.ui.web.WebFragmentArgs
 import com.tantei.wanandroid.viewmodels.GlobalViewModel
 
@@ -34,7 +35,7 @@ class ArticleListFragment() : BaseFragmentVMVB<ArticleViewModel, FragmentArticle
     override fun initView() {
         val layoutManager = LinearLayoutManager(activity)
         mBinding.articleList.layoutManager = layoutManager
-        adapter = ArticleAdapter(this, mViewModel.articleList, object : ArticleAdapter.Callbacks {
+        adapter = ArticleAdapter(this, mViewModel.articleList, mViewModel.bannerList.value!!, object : ArticleAdapter.Callbacks {
             override fun onArticleTitleClick(article: Article) {
                 val bundle = WebFragmentArgs(article.link, article.title).toBundle()
                 findNavController().navigate(R.id.action_home_to_web, bundle)

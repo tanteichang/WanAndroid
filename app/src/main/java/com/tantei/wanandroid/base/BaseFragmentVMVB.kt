@@ -23,6 +23,7 @@ abstract class BaseFragmentVMVB<VM: ViewModel, VB: ViewBinding> : Fragment() {
     protected abstract val layoutId: Int
     protected lateinit var mToolbar: androidx.appcompat.widget.Toolbar
     protected lateinit var mActivity: AppCompatActivity
+    open val hiddenBottomNavigation = false
     protected val globalViewModel by lazy { ViewModelLazy(MainViewModel::class, { MainActivity.myViewModelStore!!}, {defaultViewModelProviderFactory}).value }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -40,6 +41,10 @@ abstract class BaseFragmentVMVB<VM: ViewModel, VB: ViewBinding> : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        if (hiddenBottomNavigation) {
+            globalViewModel.isBottomNavHide.value = true
+        }
+
         mBinding = DataBindingUtil.inflate(inflater, layoutId, container, false)
         return mBinding.root
     }
@@ -48,8 +53,11 @@ abstract class BaseFragmentVMVB<VM: ViewModel, VB: ViewBinding> : Fragment() {
         return (obj.javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0] as VM
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        if (hiddenBottomNavigation) {
+            globalViewModel.isBottomNavHide.value = false
+        }
     }
 
     abstract fun initObserver()

@@ -18,25 +18,18 @@ class WebFragment() : BaseFragmentVMVB<WebViewModel, FragmentWebBinding>() {
 
     override val layoutId: Int
         get() = R.layout.fragment_web
+    override val hiddenBottomNavigation: Boolean
+        get() = true
 
     private lateinit var args: WebFragmentArgs
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         args = arguments?.let { WebFragmentArgs.fromBundle(it) }!!
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        globalViewModel.isBottomNavHide.value = false
-    }
-
     override fun initView() {
-        globalViewModel.isBottomNavHide.value = true
         globalViewModel.toolbarTitle.value = args.title
 
 

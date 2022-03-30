@@ -9,11 +9,11 @@
         android:orientation="vertical">
 
         <!--Banner-->
-        <com.youth.banner.Banner
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/home_banner"
-            android:layout_width="match_parent"
-            android:layout_height="200dp" />
+<!--        <com.youth.banner.Banner-->
+<!--            xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--            android:id="@+id/home_banner"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="200dp" />-->
 
        <fragment
            android:id="@+id/fragment_article_list"
