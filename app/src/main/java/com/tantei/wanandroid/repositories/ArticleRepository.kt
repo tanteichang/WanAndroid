@@ -3,7 +3,6 @@ package com.tantei.wanandroid.repositories
 import android.content.Context
 import androidx.room.Room
 import com.tantei.wanandroid.base.BaseRepository
-import com.tantei.wanandroid.database.entities.ArticleDataBase
 import com.tantei.wanandroid.ui.home.bean.Article
 import com.tantei.wanandroid.base.BaseResponse
 import com.tantei.wanandroid.network.CODE
@@ -30,12 +29,6 @@ class ArticleRepository private constructor(context: Context): BaseRepository() 
         }
     }
     private val latestNewsMutex = Mutex()
-    private val dataBase: ArticleDataBase = Room.databaseBuilder(
-        context.applicationContext,
-        ArticleDataBase::class.java,
-        DATABASE_NAME
-    ).build()
-    private val articleDao = dataBase.articleDao()
 
     private val lastTopArticleList = mutableListOf<Article>()
 

@@ -9,72 +9,58 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.tantei.wanandroid.R
+import com.tantei.wanandroid.base.BaseFragment
+import com.tantei.wanandroid.base.BaseFragmentVMVB
 import com.tantei.wanandroid.databinding.FragmentArticleListBinding
 import com.tantei.wanandroid.ui.home.adapter.ArticleAdapter
 import com.tantei.wanandroid.ui.home.bean.Article
 import com.tantei.wanandroid.ui.home.viewModel.ArticleViewModel
+import com.tantei.wanandroid.ui.web.WebFragmentArgs
 import com.tantei.wanandroid.viewmodels.GlobalViewModel
 
 private const val TAG = "ArticleListFragment"
 
-class ArticleListFragment(val onItemClick: OnItemClick) : Fragment() {
+class ArticleListFragment() : BaseFragmentVMVB<ArticleViewModel, FragmentArticleListBinding>() {
 
-    interface OnItemClick {
-        fun onArticleClick(article: Article)
-    }
+    override val layoutId: Int
+        get() = R.layout.fragment_article_list
 
-    private val articleViewModel by lazy { ViewModelProvider(this).get(ArticleViewModel::class.java) }
-    private val globalViewModel by activityViewModels<GlobalViewModel>()
+
     private lateinit var adapter: ArticleAdapter
-    private lateinit var binding: FragmentArticleListBinding
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentArticleListBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
+    override fun initView() {
         val layoutManager = LinearLayoutManager(activity)
-        binding.articleList.layoutManager = layoutManager
-        adapter = ArticleAdapter(this, articleViewModel.articleList, object : ArticleAdapter.Callbacks {
+        mBinding.articleList.layoutManager = layoutManager
+        adapter = ArticleAdapter(this, mViewModel.articleList, object : ArticleAdapter.Callbacks {
             override fun onArticleTitleClick(article: Article) {
-                Log.d(TAG, "onArticleTitleClick: $article")
-                onItemClick.onArticleClick(article)
+                val bundle = WebFragmentArgs(article.link, article.title).toBundle()
+                findNavController().navigate(R.id.action_home_to_web, bundle)
             }
         })
-        binding.articleList.adapter = adapter
-        articleViewModel.getArticleList(0)
+        Log.d(TAG, "initView: call")
+        mBinding.articleList.adapter = adapter
+        if (mViewModel.articleList.isEmpty()) {
+            Log.d(TAG, "initView: fetch")
+            mViewModel.getArticleList(0)
+        }
+    }
 
-        articleViewModel.articleListData.observe(viewLifecycleOwner, Observer { result ->
+    override fun initObserver() {
+
+        mViewModel.articleListData.observe(viewLifecycleOwner, Observer { result ->
+            Log.d(TAG, "onActivityCreated: articleListData ober $result")
             val articleList = result.getOrNull()
             if (articleList != null) {
-                articleViewModel.articleList.clear()
+                mViewModel.articleList.clear()
                 Log.d(TAG, "onActivityCreated: add articleList ${articleList[0]}")
-                articleViewModel.articleList.addAll(articleList)
+                mViewModel.articleList.addAll(articleList)
                 adapter.notifyDataSetChanged()
             }
         })
-
-        globalViewModel.bottomNavigationHide.observe(viewLifecycleOwner, Observer {
-            Log.d(TAG, "Fragment onActivityCreated: $it")
-        })
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.articleList.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-            val dy = binding.articleList.computeVerticalScrollOffset()
-            if (dy > 0) {
-                globalViewModel.setBottomNavigationHide(true)
-            } else {
-                globalViewModel.setBottomNavigationHide(false)
-            }
-        }
-    }
+
 }

@@ -4,8 +4,17 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelLazy
+import androidx.lifecycle.ViewModelStore
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.setupWithNavController
 import com.tantei.wanandroid.base.BaseActivity
 import com.tantei.wanandroid.databinding.ActivityMainBinding
 import com.tantei.wanandroid.ui.home.HomeFragment
@@ -15,56 +24,55 @@ import com.tantei.wanandroid.viewmodels.GlobalViewModel
 private const val TAG = "MainActivity"
 
 class MainActivity : BaseActivity() {
+    companion object {
+        var myViewModelStore: ViewModelStore? = null
+    }
 
     private lateinit var binding: ActivityMainBinding
-    private var currentPage: Int = -1
-    private val globalViewModel by viewModels<GlobalViewModel>()
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        viewModel = ViewModelLazy(MainViewModel::class, { viewModelStore}, { defaultViewModelProviderFactory }).value
+        myViewModelStore = viewModelStore
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        initToolBar()
         initBottomNavigation()
         initObserver()
     }
 
     private fun initObserver() {
-        globalViewModel.bottomNavigationHide.observe(this, Observer {
-            Log.d(TAG, "initObserver: $it")
-            if (it == true) {
-                binding.bottomNavigation.visibility =View.GONE
-            } else {
-                binding.bottomNavigation.visibility =View.VISIBLE
-            }
-        })
-    }
-
-    private fun replaceFragment(id: Int, fragment: Fragment) {
-        if (currentPage == id) {
-            return
+        viewModel.isBottomNavHide.observe(this) {
+            binding.bottomNavigation.visibility = if (it) View.GONE else View.VISIBLE
         }
-        currentPage = id
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.frame_content, fragment)
-            addToBackStack(null)
-            commit()
+        viewModel.toolbarTitle.observe(this) {
+            binding.toolBar.title = it
         }
     }
 
+    private fun initToolBar() {
+        viewModel.toolbarTitle.value = resources.getString(R.string.home)
+        setSupportActionBar(binding.toolBar)
+    }
     private fun initBottomNavigation() {
-        replaceFragment(R.id.page_home, HomeFragment())
-        binding.bottomNavigation.setOnItemSelectedListener {
-            when(it.itemId) {
-                R.id.page_home -> {
-                    replaceFragment(R.id.page_home, HomeFragment())
-                    true
+        val host  = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = host.findNavController()
+        NavigationUI.setupWithNavController(binding.bottomNavigation, navController)
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            run {
+                when (destination.id) {
+                    R.id.page_mine -> {
+                        binding.toolBar.title = resources.getString(R.string.mine)
+                    }
+                    R.id.page_home -> {
+                        binding.toolBar.title = resources.getString(R.string.home)
+                    }
                 }
-                R.id.page_mine -> {
-                    replaceFragment(R.id.page_mine, MineFragment())
-                    true
-                }
-                else -> false
             }
         }
     }
+
 }
