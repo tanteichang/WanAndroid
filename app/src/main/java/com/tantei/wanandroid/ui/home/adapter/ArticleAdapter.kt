@@ -1,8 +1,10 @@
 package com.tantei.wanandroid.ui.home.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -27,8 +29,12 @@ class ArticleAdapter(
     private val bannerList: List<BannerBean>,
     val callbacks: Callbacks) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    enum class VIEW_TYPE(value: Int) {
-        BANNER(1),ARTICLE(2)
+    // 文章列表，banner（1）,footer(1)
+    private val listSize: Int
+        get() = articleList.size + (if (bannerList.isEmpty()) 0 else 1) + 1
+
+    enum class VIEW_TYPE(val viewType: Int) {
+        BANNER(1),ARTICLE(2),FOOTER(3)
     }
 
     interface Callbacks {
@@ -46,28 +52,45 @@ class ArticleAdapter(
         val banner = view.findViewById<Banner<BannerBean, BannerImageAdapter<BannerBean>>>(R.id.home_item_banner)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    inner class FooterViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val process = view.findViewById<ProgressBar>(R.id.bottom_progress)
+    }
 
-        if (viewType == VIEW_TYPE.BANNER.ordinal) {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.banner_item, parent, false)
-            return BannerViewHolder(view)
-        } else {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.article_item, parent, false)
-            return ArticleViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        Log.d(TAG, "onCreateViewHolder: $viewType")
+        return when(viewType) {
+            VIEW_TYPE.BANNER.viewType -> {
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.banner_item, parent, false)
+                return BannerViewHolder(view)
+            }
+            VIEW_TYPE.ARTICLE.viewType -> {
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.article_item, parent, false)
+                return ArticleViewHolder(view)
+            }
+            else -> {
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.footer_item, parent, false)
+                return FooterViewHolder(view)
+            }
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (position == 0) {
-            return VIEW_TYPE.BANNER.ordinal
-        } else {
-            return VIEW_TYPE.ARTICLE.ordinal
+        Log.d(TAG, "getItemViewType position: $position")
+        Log.d(TAG, "getItemViewType listSize: $listSize")
+        return when(position) {
+            0 -> VIEW_TYPE.BANNER.viewType
+            listSize -> VIEW_TYPE.FOOTER.viewType
+            else -> VIEW_TYPE.ARTICLE.viewType
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ArticleViewHolder) {
-            val article = articleList[position]
+            Log.d(TAG, "listSize: $listSize")
+        try {
+            val _position = getRealPosition(holder)
+            Log.d(TAG, "onBindViewHolder: $_position")
+            val article = articleList[_position]
             holder.articleTitle.text = article.title
             holder.shareUser.text = article.shareUser
             holder.publishTime.text = DateFormat.getDateInstance().format(Date(article.publishTime))
@@ -77,6 +100,10 @@ class ArticleAdapter(
             }
             holder.shareUser.setOnClickListener {
             }
+        } catch(e: Exception) {
+            Log.d(TAG, "onBindViewHolder: $e")
+            e.printStackTrace()
+        }
         }
         if (holder is BannerViewHolder) {
             holder.banner.setAdapter(object : BannerImageAdapter<BannerBean>(bannerList) {
@@ -98,9 +125,20 @@ class ArticleAdapter(
                 }
             })
         }
+        if (holder is FooterViewHolder) {
+            holder.process.progress = 100
+        }
+    }
+
+    // 计算存在 banner 之后的 position
+    private fun getRealPosition(holder: RecyclerView.ViewHolder): Int {
+        val position = holder.layoutPosition
+        Log.d(TAG, "getRealPosition: $position")
+        return position - 1
     }
 
     override fun getItemCount(): Int {
-        return articleList.size
+        Log.d(TAG, "getItemCount: $listSize")
+        return listSize
     }
 }

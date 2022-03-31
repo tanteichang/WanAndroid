@@ -18,9 +18,9 @@ class ArticleViewModel : BaseViewModel() {
    val articleList = ArrayList<Article>()
    fun getArticleList(page: Int) {
       viewModelScope.launch {
-         when(val result = WanNetwork.fetchArticleList(page)) {
+         when(val result = ArticleRepository.get().getArticleList(page)) {
             is ApiResult.Success -> {
-               articleListLiveData.value = result.data?.data?.articleList
+               articleListLiveData.value = result?.data?.data?.articleList!!
             }
             is ApiResult.Failure -> {
                Log.d(TAG, "getArticleList Failure: $result")

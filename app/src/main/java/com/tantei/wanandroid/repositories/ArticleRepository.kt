@@ -12,6 +12,7 @@ import com.tantei.wanandroid.network.WanNetwork
 import com.tantei.wanandroid.ui.home.bean.ArticleListResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import java.lang.IllegalStateException
@@ -38,39 +39,30 @@ class ArticleRepository private constructor(context: Context): BaseRepository() 
 
     suspend fun getBannerList() = WanNetwork.fetchBannerList()
 
+    suspend fun getArticleWithTop(page: Int): ApiResult<List<Article>> {
+        return coroutineScope {
+            val result = ArrayList<Article>()
+            val aList = ArrayList<Article>()
+            val tList = ArrayList<Article>()
+            when(val articles = WanNetwork.fetchArticleList(page)) {
+                is ApiResult.Success -> {
+                    articles.data?.data?.articleList?.let { aList.addAll(it) }
+                }
+                is ApiResult.Failure -> ApiResult.Failure(404, "fetchArticleList error")
+            }
+            when(val topRes = WanNetwork.fetchTopArticleList()) {
+                is ApiResult.Success -> {
+                    topRes.data?.data?.let { tList.addAll(it) }
+                }
+                is ApiResult.Failure ->  ApiResult.Failure(404, "fetchTopArticleList error")
+            }
+            result.apply {
+                addAll(tList)
+                addAll(aList)
+            }
+            ApiResult.Success(result)
+        }
+    }
 
-//    suspend fun getArticleList(page: Int, withTop: Boolean = false): ApiResult<BaseResponse<ArticleListResponse>> {
-//        // https://developer.android.com/jetpack/guide/data-layer#in-memory-cache
-//
-////        if (withTop && lastTopArticleList.isEmpty()) {
-////            GlobalScope.launch {
-////                WanNetwork.fetchTopArticleList()
-////                when(val result = WanNetwork.fetchTopArticleList()) {
-////                    is ApiResult.Success -> {
-////
-////                    }
-////                    is ApiResult.Failure -> {
-////
-////                    }
-////                }
-////            }
-////        }
-//
-////        val articleListResponse = WanNetwork.fetchArticleList(page)
-////        if (articleListResponse.errorCode == CODE.OK.code) {
-////            val articleList = if (withTop) {
-////                val joined = ArrayList<Article>()
-////                joined.addAll(lastTopArticleList)
-////                joined.addAll(articleListResponse.data.articleList)
-////                joined
-////            } else {
-////                articleListResponse.data.articleList
-////            }
-////            Result.success(articleList)
-////        } else {
-////            Result.failure((RuntimeException("response code is${articleListResponse.errorCode}")))
-////        }
-//        return WanNetwork.fetchArticleList(page)
-//    }
 
 }

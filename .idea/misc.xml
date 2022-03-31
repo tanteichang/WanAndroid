@@ -7,6 +7,7 @@
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.16388044579533942" />
         <entry key="app/src/main/res/layout/article_item.xml" value="0.29322916666666665" />
         <entry key="app/src/main/res/layout/banner_item.xml" value="0.29322916666666665" />
+        <entry key="app/src/main/res/layout/footer_item.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_article_list.xml" value="0.29322916666666665" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.18115942028985507" />
         <entry key="app/src/main/res/layout/fragment_mine.xml" value="0.18115942028985507" />

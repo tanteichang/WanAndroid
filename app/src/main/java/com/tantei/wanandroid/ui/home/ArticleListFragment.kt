@@ -4,14 +4,18 @@ import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.tantei.wanandroid.R
 import com.tantei.wanandroid.base.BaseFragmentVMVB
 import com.tantei.wanandroid.databinding.FragmentArticleListBinding
+import com.tantei.wanandroid.repositories.ArticleRepository
 import com.tantei.wanandroid.ui.home.adapter.ArticleAdapter
 import com.tantei.wanandroid.ui.home.bean.Article
 import com.tantei.wanandroid.ui.home.bean.Banner
 import com.tantei.wanandroid.ui.home.viewModel.ArticleViewModel
 import com.tantei.wanandroid.ui.web.WebFragmentArgs
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 private const val TAG = "ArticleListFragment"
 
@@ -30,17 +34,24 @@ class ArticleListFragment() : BaseFragmentVMVB<ArticleViewModel, FragmentArticle
 
         mViewModel.getBannerList()
         mViewModel.getArticleList(0)
+
+        mBinding.homeSwipeRefresh.setOnRefreshListener(object : SwipeRefreshLayout.OnRefreshListener {
+            override fun onRefresh() {
+                mViewModel.getArticleList(0)
+                mBinding.homeSwipeRefresh.isRefreshing = false
+            }
+        })
     }
 
     override fun initObserver() {
         mViewModel.articleListLiveData.observe(viewLifecycleOwner, Observer { result ->
+            Log.d(TAG, "articleListLiveData: $result")
             mViewModel.articleList.clear()
             mViewModel.articleList.addAll(result)
             adapter.notifyDataSetChanged()
         })
 
         mViewModel.bannerListLiveData.observe(viewLifecycleOwner) { result ->
-            Log.d(TAG, "initObserver bannerList: ${result.size}")
             mViewModel.bannerList.clear()
             mViewModel.bannerList.addAll(result)
             adapter.notifyDataSetChanged()
