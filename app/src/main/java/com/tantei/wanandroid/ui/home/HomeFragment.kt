@@ -33,27 +33,5 @@ class HomeFragment : BaseFragmentVMVB<HomeViewModel, FragmentHomeBinding>(){
 
     }
     override fun initObserver() {
-//        mViewModel.bannerList.observe(this) { result ->
-//            mBinding.homeBanner.setAdapter(object : BannerImageAdapter<com.tantei.wanandroid.ui.home.bean.Banner>(result.getOrNull()) {
-//                override fun onBindView(
-//                    holder: BannerImageHolder?,
-//                    data: com.tantei.wanandroid.ui.home.bean.Banner,
-//                    position: Int,
-//                    size: Int
-//                ) {
-//                    if (holder != null) {
-//                        Glide.with(this@HomeFragment).load(data.imagePath).into(holder.imageView)
-//                    }
-//                    holder?.itemView?.setOnClickListener(object : View.OnClickListener {
-//                        override fun onClick(p0: View?) {
-//                            val bundle = WebFragmentArgs(data.url, data.title).toBundle()
-//                            findNavController().navigate(R.id.action_home_to_web, bundle)
-//                        }
-//                    })
-//                }
-//            })
-//
-//        }
     }
-
 }

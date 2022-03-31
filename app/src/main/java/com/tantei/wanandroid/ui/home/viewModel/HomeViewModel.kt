@@ -4,5 +4,5 @@ import com.tantei.wanandroid.base.BaseViewModel
 import com.tantei.wanandroid.repositories.HomeRepository
 
 class HomeViewModel : BaseViewModel() {
-    val bannerList = HomeRepository.getBannerList()
+//    val bannerList = HomeRepository.getBannerList()
 }

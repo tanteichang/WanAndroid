@@ -15,6 +15,7 @@ import com.youth.banner.Banner
 import com.tantei.wanandroid.ui.home.bean.Banner as BannerBean
 import com.youth.banner.adapter.BannerImageAdapter
 import com.youth.banner.holder.BannerImageHolder
+import com.youth.banner.listener.OnBannerListener
 import java.text.DateFormat
 import java.util.*
 
@@ -32,6 +33,7 @@ class ArticleAdapter(
 
     interface Callbacks {
         fun onArticleTitleClick(article: Article)
+        fun onBannerItemClick(banner: BannerBean)
     }
 
     inner class ArticleViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -41,7 +43,7 @@ class ArticleAdapter(
     }
 
     inner class BannerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val banner = view.findViewById<Banner<List<BannerBean>, BannerImageAdapter<List<BannerBean>>>>(R.id.home_item_banner)
+        val banner = view.findViewById<Banner<BannerBean, BannerImageAdapter<BannerBean>>>(R.id.home_item_banner)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -77,14 +79,22 @@ class ArticleAdapter(
             }
         }
         if (holder is BannerViewHolder) {
-            holder.banner.setAdapter(object : BannerImageAdapter<List<BannerBean>>(bannerList) {
+            holder.banner.setAdapter(object : BannerImageAdapter<BannerBean>(bannerList) {
                 override fun onBindView(
                     holder: BannerImageHolder?,
-                    data: List<BannerBean>?,
+                    data: BannerBean?,
                     position: Int,
                     size: Int
                 ) {
-                    holder?.let { Glide.with(fragment).load(data).into(it.imageView) }
+                    holder?.let { Glide.with(fragment).load(data?.imagePath).into(it.imageView) }
+                }
+            })
+            holder.banner.setOnBannerListener(object : OnBannerListener<BannerBean> {
+                override fun OnBannerClick(
+                    data: com.tantei.wanandroid.ui.home.bean.Banner?,
+                    position: Int
+                ) {
+                    callbacks.onBannerItemClick(data!!)
                 }
             })
         }
