@@ -32,8 +32,7 @@ class ArticleAdapter(
     // 文章列表，banner（1）,footer(1)
     private val listSize: Int
         get() {
-            if (articleList.size === 0) { return 0 }
-            return articleList.size + (if (bannerList.isEmpty()) 0 else 1) + 1
+            return articleList.size + (if (bannerList.isEmpty()) 0 else 1)
         }
 
     enum class VIEW_TYPE(val viewType: Int) {
@@ -82,20 +81,18 @@ class ArticleAdapter(
         Log.d(TAG, "getItemViewType listSize: $listSize")
         return when(position) {
             0 -> VIEW_TYPE.BANNER.viewType
-            listSize - 1 -> VIEW_TYPE.FOOTER.viewType
+            listSize -> VIEW_TYPE.FOOTER.viewType
             else -> VIEW_TYPE.ARTICLE.viewType
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         Log.d(TAG, "onBindViewHolder: $position $holder")
-        if (position == 0) {
-
-        }
-        if (holder is ArticleViewHolder && position >= 1 && position <= articleList.size ) {
+        if (holder is ArticleViewHolder) {
             val _position = getRealPosition(holder)
             Log.d(TAG, "onBindViewHolder: $_position")
             val article = articleList[_position]
+            Log.d(TAG, "onBindViewHolder: $article")
             holder.articleTitle.text = article.title
             holder.shareUser.text = article.shareUser
             holder.publishTime.text = DateFormat.getDateInstance().format(Date(article.publishTime))
@@ -106,7 +103,7 @@ class ArticleAdapter(
             holder.shareUser.setOnClickListener {
             }
         }
-        if (holder is BannerViewHolder && position == 0) {
+        if (holder is BannerViewHolder) {
             holder.banner.setAdapter(object : BannerImageAdapter<BannerBean>(bannerList) {
                 override fun onBindView(
                     holder: BannerImageHolder?,
@@ -127,7 +124,6 @@ class ArticleAdapter(
             })
         }
         if (holder is FooterViewHolder) {
-
             holder.process.progress = 100
         }
     }
@@ -141,6 +137,6 @@ class ArticleAdapter(
 
     override fun getItemCount(): Int {
         Log.d(TAG, "getItemCount: $listSize")
-        return listSize + 1
+        return listSize
     }
 }

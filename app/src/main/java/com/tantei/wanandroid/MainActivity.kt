@@ -1,6 +1,7 @@
 package com.tantei.wanandroid
 
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.ViewModelLazy
 import androidx.lifecycle.ViewModelStore
 import androidx.navigation.findNavController
@@ -48,9 +49,7 @@ class MainActivity : BaseActivity() {
     private fun initObserver() {
         // 显示/隐藏底部导航栏
         viewModel.isBottomNavHide.observe(this) {
-            binding.bottomNavigation.clearAnimation()
-            val translationY = if (it) binding.bottomNavigation.height.toFloat() else 0f
-            binding.bottomNavigation.animate().translationY(translationY).duration = 300
+            binding.bottomNavigation.visibility = if (it) View.GONE else View.VISIBLE
         }
         // 设置顶部标题
         viewModel.toolbarTitle.observe(this) { binding.toolBar.title = it }
