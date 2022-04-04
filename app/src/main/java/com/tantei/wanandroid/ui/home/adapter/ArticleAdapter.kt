@@ -20,14 +20,28 @@ import com.youth.banner.holder.BannerImageHolder
 import com.youth.banner.listener.OnBannerListener
 import java.text.DateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 private const val TAG = "ArticleAdapter"
 
 class ArticleAdapter(
     private val fragment: Fragment,
-    private val articleList: List<Article>,
-    private val bannerList: List<BannerBean>,
     val callbacks: Callbacks) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    private var articleList: ArrayList<Article> = ArrayList()
+    private var bannerList: ArrayList<BannerBean> = ArrayList()
+    fun setArticleList(list: List<Article>) {
+        articleList.clear()
+        articleList.addAll(list)
+    }
+    fun appendArticleList(list: List<Article>) {
+        articleList.addAll(list)
+    }
+    fun setBannerList(list: List<BannerBean>) {
+        bannerList.clear()
+        bannerList.addAll(list)
+    }
+
 
     // 文章列表，banner（1）,footer(1)
     private val listSize: Int
@@ -59,7 +73,6 @@ class ArticleAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        Log.d(TAG, "onCreateViewHolder: $viewType")
         return when(viewType) {
             VIEW_TYPE.BANNER.viewType -> {
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.banner_item, parent, false)
@@ -77,22 +90,17 @@ class ArticleAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        Log.d(TAG, "getItemViewType position: $position")
-        Log.d(TAG, "getItemViewType listSize: $listSize")
-        return when(position) {
-            0 -> VIEW_TYPE.BANNER.viewType
-            listSize -> VIEW_TYPE.FOOTER.viewType
-            else -> VIEW_TYPE.ARTICLE.viewType
+        if (bannerList.isNotEmpty() && position == 0) {
+            return VIEW_TYPE.BANNER.viewType
+        } else {
+            return VIEW_TYPE.ARTICLE.viewType
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        Log.d(TAG, "onBindViewHolder: $position $holder")
         if (holder is ArticleViewHolder) {
             val _position = getRealPosition(holder)
-            Log.d(TAG, "onBindViewHolder: $_position")
             val article = articleList[_position]
-            Log.d(TAG, "onBindViewHolder: $article")
             holder.articleTitle.text = article.title
             holder.shareUser.text = article.shareUser
             holder.publishTime.text = DateFormat.getDateInstance().format(Date(article.publishTime))
@@ -131,12 +139,10 @@ class ArticleAdapter(
     // 计算存在 banner 之后的 position
     private fun getRealPosition(holder: RecyclerView.ViewHolder): Int {
         val position = holder.layoutPosition
-        Log.d(TAG, "getRealPosition: $position")
-        return position - 1
+        return position - if (bannerList.isEmpty()) 0 else 1
     }
 
     override fun getItemCount(): Int {
-        Log.d(TAG, "getItemCount: $listSize")
         return listSize
     }
 }

@@ -11,7 +11,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 sealed class ApiResult<out T> {
-    data class Success<out T>(val data: T?): ApiResult<T>()
+    data class Success<out T>(val result: T?): ApiResult<T>()
     data class Failure(val errorCode: Int, val errorMessage: String): ApiResult<Nothing>()
 }
 

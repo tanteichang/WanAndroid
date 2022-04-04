@@ -10,13 +10,12 @@ import com.tantei.wanandroid.network.ApiResult
 import com.tantei.wanandroid.network.CODE
 import com.tantei.wanandroid.network.WanNetwork
 import com.tantei.wanandroid.ui.home.bean.ArticleListResponse
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import java.lang.IllegalStateException
 import kotlin.coroutines.CoroutineContext
+import kotlin.math.log
+import kotlin.system.measureTimeMillis
 
 private const val TAG = "ArticleRepository"
 
@@ -44,18 +43,25 @@ class ArticleRepository private constructor(context: Context): BaseRepository() 
             val result = ArrayList<Article>()
             val aList = ArrayList<Article>()
             val tList = ArrayList<Article>()
-            when(val articles = WanNetwork.fetchArticleList(page)) {
-                is ApiResult.Success -> {
-                    articles.data?.data?.articleList?.let { aList.addAll(it) }
-                }
-                is ApiResult.Failure -> ApiResult.Failure(404, "fetchArticleList error")
-            }
-            when(val topRes = WanNetwork.fetchTopArticleList()) {
-                is ApiResult.Success -> {
-                    topRes.data?.data?.let { tList.addAll(it) }
-                }
-                is ApiResult.Failure ->  ApiResult.Failure(404, "fetchTopArticleList error")
-            }
+          val time = measureTimeMillis {
+
+              val fetchArticle = async { WanNetwork.fetchArticleList(page) }
+              val fetchTop = async { WanNetwork.fetchTopArticleList() }
+
+              when(val articles = fetchArticle.await()) {
+                  is ApiResult.Success -> {
+                      articles.result?.data?.articleList?.let { aList.addAll(it) }
+                  }
+                  is ApiResult.Failure -> ApiResult.Failure(404, "fetchArticleList error")
+              }
+              when(val topRes = fetchTop.await()) {
+                  is ApiResult.Success -> {
+                      topRes.result?.data?.let { tList.addAll(it) }
+                  }
+                  is ApiResult.Failure ->  ApiResult.Failure(404, "fetchTopArticleList error")
+              }
+          }
+            Log.d(TAG, "measureTimeMillis: $time")
             result.apply {
                 addAll(tList)
                 addAll(aList)

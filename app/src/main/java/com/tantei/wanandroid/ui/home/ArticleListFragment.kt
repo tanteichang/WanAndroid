@@ -29,7 +29,7 @@ class ArticleListFragment() : BaseFragmentVMVB<ArticleViewModel, FragmentArticle
     override fun initView() {
         val layoutManager = LinearLayoutManager(activity)
         mBinding.articleList.layoutManager = layoutManager
-        adapter = ArticleAdapter(this, mViewModel.articleList, mViewModel.bannerList, this)
+        adapter = ArticleAdapter(this, this)
         mBinding.articleList.adapter = adapter
 
         mViewModel.getBannerList()
@@ -44,16 +44,13 @@ class ArticleListFragment() : BaseFragmentVMVB<ArticleViewModel, FragmentArticle
     }
 
     override fun initObserver() {
-        mViewModel.articleListLiveData.observe(viewLifecycleOwner, Observer { result ->
-            Log.d(TAG, "articleListLiveData: $result")
-            mViewModel.articleList.clear()
-            mViewModel.articleList.addAll(result)
+        mViewModel.articleList.observe(viewLifecycleOwner, Observer { result ->
+            adapter.setArticleList(result)
             adapter.notifyDataSetChanged()
         })
 
-        mViewModel.bannerListLiveData.observe(viewLifecycleOwner) { result ->
-            mViewModel.bannerList.clear()
-            mViewModel.bannerList.addAll(result)
+        mViewModel.bannerList.observe(viewLifecycleOwner) { result ->
+            adapter.setBannerList(result)
             adapter.notifyDataSetChanged()
         }
     }

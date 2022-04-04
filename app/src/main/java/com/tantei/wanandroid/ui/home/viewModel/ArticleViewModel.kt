@@ -10,36 +10,43 @@ import com.tantei.wanandroid.repositories.ArticleRepository
 import com.tantei.wanandroid.repositories.HomeRepository
 import com.tantei.wanandroid.ui.home.bean.Banner
 import kotlinx.coroutines.launch
+import java.util.stream.LongStream
 
 private const val TAG = "ArticleViewModel"
 
 class ArticleViewModel : BaseViewModel() {
-   val articleListLiveData: MutableLiveData<List<Article>> = MutableLiveData(emptyList())
-   val articleList = ArrayList<Article>()
+   private val _articleListLiveData: MutableLiveData<List<Article>> = MutableLiveData(emptyList())
+   val articleList: LiveData<List<Article>>
+      get() = _articleListLiveData
+
    fun getArticleList(page: Int) {
       viewModelScope.launch {
-         when(val result = ArticleRepository.get().getArticleList(page)) {
+         when(val res = ArticleRepository.get().getArticleWithTop(page)) {
             is ApiResult.Success -> {
-               articleListLiveData.value = result?.data?.data?.articleList!!
+               _articleListLiveData.value = res?.result.orEmpty()
             }
             is ApiResult.Failure -> {
-               Log.d(TAG, "getArticleList Failure: $result")
+               Log.d(TAG, "getArticleList Failure: $res")
             }
          }
       }
    }
 
 
-   val bannerListLiveData: MutableLiveData<List<Banner>> = MutableLiveData()
-   val bannerList = ArrayList<Banner>()
+   private val _bannerListLiveData: MutableLiveData<List<Banner>> = MutableLiveData(emptyList())
+   val bannerList: LiveData<List<Banner>>
+      get() {
+        return _bannerListLiveData
+      }
+
    fun getBannerList() {
       viewModelScope.launch {
-        when(val result = ArticleRepository.get().getBannerList()) {
+        when(val res = ArticleRepository.get().getBannerList()) {
            is ApiResult.Success -> {
-              bannerListLiveData.value = result.data?.data.orEmpty()
+              _bannerListLiveData.value = res.result?.data.orEmpty()
            }
            is ApiResult.Failure -> {
-              Log.d(TAG, "getBannerList Failure: $result")
+              Log.d(TAG, "getBannerList Failure: $res")
            }
         }
       }
