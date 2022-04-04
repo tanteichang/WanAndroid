@@ -10,12 +10,9 @@ import com.tantei.wanandroid.network.ApiResult
 import com.tantei.wanandroid.network.CODE
 import com.tantei.wanandroid.network.WanNetwork
 import com.tantei.wanandroid.ui.home.bean.ArticleListResponse
+import com.tantei.wanandroid.utils.LLog
 import kotlinx.coroutines.*
-import kotlinx.coroutines.sync.Mutex
 import java.lang.IllegalStateException
-import kotlin.coroutines.CoroutineContext
-import kotlin.math.log
-import kotlin.system.measureTimeMillis
 
 private const val TAG = "ArticleRepository"
 
@@ -53,7 +50,9 @@ class ArticleRepository private constructor(context: Context): BaseRepository() 
                 is ApiResult.Failure -> ApiResult.Failure(404, "fetchArticleList error")
             }
             when(val topRes = fetchTop.await()) {
+
                 is ApiResult.Success -> {
+                    LLog.d("${topRes.result?.data}")
                     topRes.result?.data?.let { tList.addAll(it) }
                 }
                 is ApiResult.Failure ->  ApiResult.Failure(404, "fetchTopArticleList error")
