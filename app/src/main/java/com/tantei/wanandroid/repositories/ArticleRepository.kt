@@ -43,25 +43,21 @@ class ArticleRepository private constructor(context: Context): BaseRepository() 
             val result = ArrayList<Article>()
             val aList = ArrayList<Article>()
             val tList = ArrayList<Article>()
-          val time = measureTimeMillis {
+            val fetchArticle = async { WanNetwork.fetchArticleList(page) }
+            val fetchTop = async { WanNetwork.fetchTopArticleList() }
 
-              val fetchArticle = async { WanNetwork.fetchArticleList(page) }
-              val fetchTop = async { WanNetwork.fetchTopArticleList() }
-
-              when(val articles = fetchArticle.await()) {
-                  is ApiResult.Success -> {
-                      articles.result?.data?.articleList?.let { aList.addAll(it) }
-                  }
-                  is ApiResult.Failure -> ApiResult.Failure(404, "fetchArticleList error")
-              }
-              when(val topRes = fetchTop.await()) {
-                  is ApiResult.Success -> {
-                      topRes.result?.data?.let { tList.addAll(it) }
-                  }
-                  is ApiResult.Failure ->  ApiResult.Failure(404, "fetchTopArticleList error")
-              }
-          }
-            Log.d(TAG, "measureTimeMillis: $time")
+            when(val articles = fetchArticle.await()) {
+                is ApiResult.Success -> {
+                    articles.result?.data?.articleList?.let { aList.addAll(it) }
+                }
+                is ApiResult.Failure -> ApiResult.Failure(404, "fetchArticleList error")
+            }
+            when(val topRes = fetchTop.await()) {
+                is ApiResult.Success -> {
+                    topRes.result?.data?.let { tList.addAll(it) }
+                }
+                is ApiResult.Failure ->  ApiResult.Failure(404, "fetchTopArticleList error")
+            }
             result.apply {
                 addAll(tList)
                 addAll(aList)
