@@ -1,6 +1,7 @@
 package com.tantei.wanandroid.utils
 
 import android.util.Log
+import com.tantei.wanandroid.database.entities.Article
 
 interface ILog {
     fun v(message: String)
@@ -26,7 +27,7 @@ object LLog : ILog {
 
     private fun getClassInfo(sElement: Array<StackTraceElement>): ClassInfo {
         val className =  sElement[1].className.split("$")[0]
-        val methodName = sElement[1].className.split("$")[1]
+        val methodName = sElement[1].methodName
         return ClassInfo(sElement[1].fileName, className, methodName, sElement[1].lineNumber)
     }
 
@@ -39,7 +40,7 @@ object LLog : ILog {
         val buffer = StringBuffer()
         buffer.append("===[class: ${classInfo.className}]===[method: ${classInfo.methodName}]===[line: ${classInfo.lineNumber}]===\n")
         buffer.append(message + "\n")
-        buffer.append("===[end]===\n")
+        buffer.append("===[end]===")
         return buffer.toString()
     }
     private fun log(classInfo: ClassInfo, priority: Int, tag: String, message: String) {

@@ -1,15 +1,11 @@
 package com.tantei.wanandroid.repositories
 
 import android.content.Context
-import android.util.Log
-import androidx.room.Room
 import com.tantei.wanandroid.base.BaseRepository
+import com.tantei.wanandroid.database.WanDatabase
 import com.tantei.wanandroid.ui.home.bean.Article
-import com.tantei.wanandroid.base.BaseResponse
 import com.tantei.wanandroid.network.ApiResult
-import com.tantei.wanandroid.network.CODE
 import com.tantei.wanandroid.network.WanNetwork
-import com.tantei.wanandroid.ui.home.bean.ArticleListResponse
 import com.tantei.wanandroid.utils.LLog
 import kotlinx.coroutines.*
 import java.lang.IllegalStateException
@@ -31,6 +27,10 @@ class ArticleRepository private constructor(context: Context): BaseRepository() 
         }
     }
 
+    private val articleDao by lazy {
+        WanDatabase.get().articleDao()
+    }
+
     suspend fun getArticleList(page: Int) = WanNetwork.fetchArticleList(page)
 
     suspend fun getBannerList() = WanNetwork.fetchBannerList()
@@ -50,7 +50,6 @@ class ArticleRepository private constructor(context: Context): BaseRepository() 
                 is ApiResult.Failure -> ApiResult.Failure(404, "fetchArticleList error")
             }
             when(val topRes = fetchTop.await()) {
-
                 is ApiResult.Success -> {
                     LLog.d("${topRes.result?.data}")
                     topRes.result?.data?.let { tList.addAll(it) }
@@ -61,6 +60,7 @@ class ArticleRepository private constructor(context: Context): BaseRepository() 
                 addAll(tList)
                 addAll(aList)
             }
+
             ApiResult.Success(result)
         }
     }

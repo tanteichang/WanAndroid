@@ -10,5 +10,10 @@ data class Article(
     val link: String, // 文章链接
     val publishTime: Long, // 发布时间
     val title: String, // 标题
-    val shareUser: String // 分享人
+    val shareUser: String, // 分享人
+    val superChapterId: Int,
+    val superChapterName: String,
+    val realSuperChapterId: Int,
+    val type: Short,
+    val userId: Int,
 )

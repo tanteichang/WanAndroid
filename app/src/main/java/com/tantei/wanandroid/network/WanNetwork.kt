@@ -23,7 +23,10 @@ object WanNetwork : BaseNetwork() {
 
     private val wanApiService = ServiceCreator.create(Api::class.java)
 
-    suspend fun fetchArticleList(page: Int) = wanApiService.fetchArticleList(page)
+    /**
+     * page: Int -> 为了对应响应的curPage， 从1开始
+     */
+    suspend fun fetchArticleList(page: Int) = wanApiService.fetchArticleList(page - 1)
     suspend fun fetchTopArticleList() = wanApiService.fetchTopArticles()
     suspend fun fetchBannerList() = wanApiService.fetchBanner()
 }

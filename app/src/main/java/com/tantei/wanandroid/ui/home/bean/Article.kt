@@ -17,4 +17,8 @@ data class Article(
     val title: String, // 标题
     val shareUser: String, // 分享人,
     val type: ArticleType,
+    val superChapterId: Int,
+    val superChapterName: String,
+    val realSuperChapterId: Int,
+    val userId: Int,
 )

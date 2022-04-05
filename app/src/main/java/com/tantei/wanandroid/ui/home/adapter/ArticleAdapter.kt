@@ -35,12 +35,13 @@ class ArticleAdapter(
         articleList.addAll(list)
     }
     fun appendArticleList(list: List<Article>) {
-        articleList.addAll(list)
+        articleList.plusAssign(list)
     }
     fun setBannerList(list: List<BannerBean>) {
         bannerList.clear()
         bannerList.addAll(list)
     }
+    val articleListSize = articleList.size
 
 
     // 文章列表，banner（1）,footer(1)

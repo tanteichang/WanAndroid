@@ -7,7 +7,6 @@
         tools:context=".ui.home.HomeFragment"
         android:background="#e8ede0"
         android:orientation="vertical">
-
        <fragment
            android:id="@+id/fragment_article_list"
            android:name="com.tantei.wanandroid.ui.home.ArticleListFragment"
