@@ -2,6 +2,7 @@ package com.tantei.wanandroid
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.ViewModelLazy
 import androidx.lifecycle.ViewModelStore
 import androidx.navigation.findNavController
@@ -54,6 +55,10 @@ class MainActivity : BaseActivity() {
         }
         // 设置顶部标题
         viewModel.toolbarTitle.observe(this) { binding.toolBar.title = it }
+        // 全局 toast
+        viewModel.toastMessage.observe(this) {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT)
+        }
     }
 
     private fun initToolBar() {

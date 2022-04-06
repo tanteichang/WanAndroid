@@ -6,6 +6,23 @@
     app:startDestination="@id/page_home"
     >
     <fragment
+        android:id="@+id/page_login"
+        android:name="com.tantei.wanandroid.ui.login.LoginFragment"
+        android:label="loginFragment"
+        tools:layout="@layout/fragment_login"
+        >
+       <action
+           android:id="@+id/action_login_to_mine"
+           app:destination="@id/page_mine"
+           />
+        <argument
+            android:name="from"
+            app:argType="integer" />
+        <argument
+            android:name="to"
+            app:argType="integer" />
+    </fragment>
+    <fragment
         android:id="@+id/page_home"
         android:name="com.tantei.wanandroid.ui.home.HomeFragment"
         android:label="HomeFragment"
@@ -19,13 +36,15 @@
             app:popEnterAnim="@android:anim/slide_in_left"
             app:popExitAnim="@android:anim/slide_out_right"
             app:popUpTo="@id/fragment_web" />
-        </fragment>
+    </fragment>
     <fragment
         android:id="@+id/page_mine"
         android:name="com.tantei.wanandroid.ui.mine.MineFragment"
         android:label="MineFragment"
         tools:layout="@layout/fragment_mine"
         >
+        <action android:id="@+id/action_mine_to_login"
+            app:destination="@id/page_login"/>
     </fragment>
     <fragment
         android:id="@+id/fragment_web"

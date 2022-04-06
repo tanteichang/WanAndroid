@@ -1,5 +1,8 @@
 package com.tantei.wanandroid.network
 
+import com.tantei.wanandroid.network.interceptor.AddCookiesInterceptor
+import com.tantei.wanandroid.network.interceptor.BusinessErrorInterceptor
+import com.tantei.wanandroid.network.interceptor.ReceivedCookiesInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -9,6 +12,8 @@ object ServiceCreator {
 
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(BusinessErrorInterceptor())
+        .addInterceptor(ReceivedCookiesInterceptor())
+        .addInterceptor(AddCookiesInterceptor())
         .build()
 
     private val retrofit = Retrofit.Builder()

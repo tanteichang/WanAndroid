@@ -1,5 +1,7 @@
-package com.tantei.wanandroid.network
+package com.tantei.wanandroid.network.interceptor
 
+import com.tantei.wanandroid.network.ApiException
+import com.tantei.wanandroid.network.CODE
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.nio.charset.Charset
@@ -26,9 +28,10 @@ class BusinessErrorInterceptor : Interceptor {
         }
 
         val errorCode = jsonObject.optInt("errorCode")
+        val errorMsg = jsonObject.optString("errorMsg")
         if (errorCode == CODE.OK.code) {
             return response
         }
-        throw ApiException(errorCode, "some error message")
+        throw ApiException(errorCode, errorMsg)
     }
 }

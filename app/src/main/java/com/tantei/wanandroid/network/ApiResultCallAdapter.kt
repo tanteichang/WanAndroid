@@ -58,7 +58,7 @@ class ApiResultCall<T>(private val delegate: Call<T>) : Call<ApiResult<T>> {
                 val failureApiResult = if (t is ApiException) {
                     ApiResult.Failure(t.errorCode, t.errorMessage)
                 } else {
-                    ApiResult.Failure(ApiError.unknownException.errorCode, ApiError.unknownException.errorMessage)
+                    ApiResult.Failure(ApiError.unknownException.errorCode, t.localizedMessage)
                 }
                 callback.onResponse(this@ApiResultCall, Response.success(failureApiResult))
             }

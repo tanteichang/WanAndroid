@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.19166666666666668" />
+        <entry key="app/src/main/res/drawable/ic_baseline_account_box_24.xml" value="0.26" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.16388044579533942" />
         <entry key="app/src/main/res/layout/article_item.xml" value="0.29322916666666665" />
@@ -11,9 +12,9 @@
         <entry key="app/src/main/res/layout/footer_item.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_article_list.xml" value="0.29322916666666665" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.18115942028985507" />
-        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.30625" />
+        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_login2.xml" value="0.3203125" />
-        <entry key="app/src/main/res/layout/fragment_mine.xml" value="0.18115942028985507" />
+        <entry key="app/src/main/res/layout/fragment_mine.xml" value="0.22" />
       </map>
     </option>
   </component>

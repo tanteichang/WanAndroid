@@ -32,6 +32,8 @@ abstract class BaseFragmentVMVB<VM: ViewModel, VB: ViewBinding> : Fragment() {
         mActivity.setSupportActionBar(mToolbar)
         initView()
         initObserver()
+
+
     }
 
     override fun onCreateView(
