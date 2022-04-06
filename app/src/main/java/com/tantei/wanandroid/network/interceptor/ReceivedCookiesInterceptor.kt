@@ -23,6 +23,7 @@ class ReceivedCookiesInterceptor() : Interceptor {
             }
             val editor = sharedPreferences.edit()
             editor.putStringSet("cookies", cookies)
+            editor.putBoolean("hasLogin", true)
             editor.commit()
         }
 

@@ -1,5 +1,6 @@
 package com.tantei.wanandroid.ui.mine
 
+import android.view.View
 import androidx.navigation.fragment.findNavController
 import com.tantei.wanandroid.R
 import com.tantei.wanandroid.base.BaseFragmentVMVB
@@ -14,15 +15,26 @@ class MineFragment : BaseFragmentVMVB<MineViewModel, FragmentMineBinding>() {
         get() = R.layout.fragment_mine
 
     override fun initView() {
-        mBinding.pageMineUserNickName.setOnClickListener {
+        mBinding.pageMineBtnLogin.setOnClickListener {
             LLog.d("go to login")
-            val bundle = LoginFragmentArgs(R.id.page_mine, R.id.page_mine).toBundle()
-            findNavController().navigate(R.id.action_mine_to_login, bundle)
+               if (mViewModel.hasLoginLiveData.value == false) {
+                   val bundle = LoginFragmentArgs(R.id.page_mine, R.id.page_mine).toBundle()
+                   findNavController().navigate(R.id.action_mine_to_login, bundle)
+               }
         }
+        mViewModel.checkLoginState()
+        mViewModel.getUserInfo()
     }
     override fun initObserver() {
-        mViewModel.userInfo.observe(viewLifecycleOwner) {
-
+        mViewModel.userInfoLiveData.observe(viewLifecycleOwner) {
+            LLog.d("$it")
+            mBinding.pageMineBtnLogin.text = it.userInfo.nickname
+            mBinding.pageMineCoin.text = it.coinInfo.coinCount.toString()
+            mBinding.pageMinLevel.text = "Lv ${it.coinInfo.level}"
+            mBinding.pageMineRank.text = it.coinInfo.rank.toString()
+        }
+        mViewModel.hasLoginLiveData.observe(viewLifecycleOwner) {
+           mBinding.pageMineBtnLogin.visibility = if (it) View.VISIBLE else View.GONE
         }
     }
 }

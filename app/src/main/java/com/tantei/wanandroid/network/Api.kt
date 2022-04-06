@@ -7,6 +7,7 @@ import com.tantei.wanandroid.ui.home.bean.BannerListResponse
 import com.tantei.wanandroid.base.BaseResponse
 import com.tantei.wanandroid.ui.home.bean.Banner
 import com.tantei.wanandroid.ui.mine.bean.User
+import com.tantei.wanandroid.ui.mine.bean.UserInfoRes
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -33,4 +34,8 @@ interface Api {
     @FormUrlEncoded
     @POST("/user/login")
     suspend fun login(@Field("username") username: String, @Field("password") password: String): ApiResult<BaseResponse<User>>
+
+    // 个人信息接口
+    @GET("/user/lg/userinfo/json")
+    suspend fun fetchUserInfo(): ApiResult<BaseResponse<UserInfoRes>>
 }

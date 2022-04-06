@@ -20,4 +20,6 @@ object WanNetwork : BaseNetwork() {
 
     // login
     suspend fun doLogin(username: String, password: String) = wanApiService.login(username, password)
+    // userinfo
+    suspend fun fetchUserInfo() = wanApiService.fetchUserInfo()
 }
