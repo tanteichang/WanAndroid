@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.home.HomeFragment"
+    android:background="#e8ede0"
+    android:orientation="vertical">
+    <fragment
+        android:id="@+id/fragment_article_list"
+        android:name="com.tantei.wanandroid.ui.home.ArticleListFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.home.HomeFragment"
-        android:background="#e8ede0"
-        android:orientation="vertical">
-       <fragment
-           android:id="@+id/fragment_article_list"
-           android:name="com.tantei.wanandroid.ui.home.ArticleListFragment"
-           android:layout_width="match_parent"
-           android:layout_height="match_parent">
-       </fragment>
-    </LinearLayout>
-</layout>
+        android:layout_height="match_parent">
+    </fragment>
+</LinearLayout>

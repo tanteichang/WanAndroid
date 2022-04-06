@@ -5,8 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelLazy
@@ -45,7 +43,10 @@ abstract class BaseFragmentVMVB<VM: ViewModel, VB: ViewBinding> : Fragment() {
             globalViewModel.isBottomNavHide.value = true
         }
 
-        mBinding = DataBindingUtil.inflate(inflater, layoutId, container, false)
+        val type = javaClass.genericSuperclass as ParameterizedType
+        val aClass = type.actualTypeArguments[1] as Class<*>
+        val method = aClass.getDeclaredMethod("inflate", LayoutInflater::class.java, ViewGroup::class.java, Boolean::class.java)
+        mBinding = method.invoke(null, layoutInflater, container, false) as VB
         return mBinding.root
     }
 

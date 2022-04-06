@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.home.ArticleListFragment">
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/home_swipeRefresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.home.ArticleListFragment">
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/home_swipeRefresh"
+        android:layout_height="wrap_content">
+        <com.tantei.views.TRecycleView
+            android:id="@+id/article_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <com.tantei.views.TRecycleView
-                android:id="@+id/article_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </com.tantei.views.TRecycleView>
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-    </FrameLayout>
-</layout>
+        </com.tantei.views.TRecycleView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</FrameLayout>

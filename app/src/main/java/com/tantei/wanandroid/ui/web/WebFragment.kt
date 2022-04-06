@@ -4,13 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.webkit.WebChromeClient
 import android.webkit.WebView
-import androidx.databinding.ViewDataBinding
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelLazy
-import com.tantei.wanandroid.MainActivity
-import com.tantei.wanandroid.MainViewModel
 import com.tantei.wanandroid.R
-import com.tantei.wanandroid.base.BaseFragment
 import com.tantei.wanandroid.base.BaseFragmentVMVB
 import com.tantei.wanandroid.databinding.FragmentWebBinding
 
