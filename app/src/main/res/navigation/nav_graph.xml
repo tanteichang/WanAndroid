@@ -21,6 +21,9 @@
         <argument
             android:name="to"
             app:argType="integer" />
+        <argument
+            android:name="hiddenBottomNav"
+            android:defaultValue="true"/>
     </fragment>
     <fragment
         android:id="@+id/page_home"
@@ -45,6 +48,8 @@
         >
         <action android:id="@+id/action_mine_to_login"
             app:destination="@id/page_login"/>
+        <action android:id="@+id/action_mine_to_setting"
+            app:destination="@id/fragment_setting"/>
     </fragment>
     <fragment
         android:id="@+id/fragment_web"
@@ -59,5 +64,16 @@
             android:name="title"
             app:argType="string"
             app:nullable="true" />
+        <argument
+            android:name="hiddenBottomNav"
+            android:defaultValue="true"/>
+    </fragment>
+    <fragment android:id="@+id/fragment_setting"
+        android:label="fragment_setting"
+        android:name="com.tantei.wanandroid.ui.setting.SettingsFragment"
+        >
+        <argument
+            android:name="hiddenBottomNav"
+            android:defaultValue="true"/>
     </fragment>
 </navigation>

@@ -27,9 +27,6 @@ import java.util.*
 class LoginFragment : BaseFragmentVMVB<LoginViewModel, FragmentLoginBinding>()  {
     override val layoutId: Int
         get() = R.layout.fragment_login
-    override val hiddenBottomNavigation: Boolean
-        get() = true
-
     override fun initObserver() {
         mViewModel.result.observe(viewLifecycleOwner) {
             LLog.d("result obs $it")

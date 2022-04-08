@@ -12,9 +12,6 @@ class WebFragment() : BaseFragmentVMVB<WebViewModel, FragmentWebBinding>() {
 
     override val layoutId: Int
         get() = R.layout.fragment_web
-    override val hiddenBottomNavigation: Boolean
-        get() = true
-
     private lateinit var args: WebFragmentArgs
 
 

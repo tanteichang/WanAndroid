@@ -1,12 +1,15 @@
 package com.tantei.wanandroid.ui.mine
 
+import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.navigation.fragment.findNavController
 import com.tantei.wanandroid.R
 import com.tantei.wanandroid.base.BaseFragmentVMVB
 import com.tantei.wanandroid.databinding.FragmentMineBinding
 import com.tantei.wanandroid.ui.login.LoginFragmentArgs
-import com.tantei.wanandroid.ui.web.WebFragmentArgs
 import com.tantei.wanandroid.utils.LLog
 
 
@@ -37,4 +40,26 @@ class MineFragment : BaseFragmentVMVB<MineViewModel, FragmentMineBinding>() {
            mBinding.pageMineBtnLogin.visibility = if (it) View.VISIBLE else View.GONE
         }
     }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.mine_tool_bar, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when(item.itemId) {
+        R.id.tool_setting -> {
+            findNavController().navigate(R.id.action_mine_to_setting)
+            true
+        }
+        else -> {
+            super.onOptionsItemSelected(item)
+        }
+    }
+
 }

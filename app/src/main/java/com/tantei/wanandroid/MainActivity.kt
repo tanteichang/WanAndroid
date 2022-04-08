@@ -1,8 +1,10 @@
 package com.tantei.wanandroid
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelLazy
 import androidx.lifecycle.ViewModelStore
 import androidx.navigation.findNavController
@@ -87,6 +89,8 @@ class MainActivity : BaseActivity() {
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
             run {
                 binding.toolBar.title = pageMap[destination.id]?.title
+                val hidden = arguments?.getBoolean("hiddenBottomNav", false) ?:  false
+                binding.bottomNavigation.isVisible = hidden === false
             }
         }
     }
