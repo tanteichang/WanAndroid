@@ -1,6 +1,5 @@
-package com.tantei.wanandroid.base
+package com.tantei.android.common.base
 
-import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 
 abstract class BaseActivity : AppCompatActivity() {

@@ -11,9 +11,8 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.*
-import com.tantei.wanandroid.base.BaseActivity
+import com.tantei.android.common.base.BaseActivity
 import com.tantei.wanandroid.databinding.ActivityMainBinding
-import com.tantei.wanandroid.utils.LLog
 
 private const val TAG = "MainActivity"
 

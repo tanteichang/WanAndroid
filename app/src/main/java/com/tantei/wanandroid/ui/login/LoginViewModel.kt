@@ -19,7 +19,7 @@ class LoginViewModel : BaseViewModel() {
     val password = MutableLiveData<String>("")
     val result = MutableLiveData(LoginResult.UNKUNOWN)
     var message = MutableLiveData("")
-    lateinit var user: User
+    var user: User? = null
 
     fun doLogin() {
         message.value = ""
