@@ -4,7 +4,7 @@ buildscript {
     }
     dependencies {
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.4.1")
-        classpath 'com.google.dagger:hilt-android-gradle-plugin:2.28-alpha'
+        classpath 'com.google.dagger:hilt-android-gradle-plugin:2.40'
     }
 }
 
@@ -15,7 +15,7 @@ plugins {
     id 'org.jetbrains.kotlin.android' version '1.6.10' apply false
 }
 
-
+apply from:"config.gradle"
 
 task clean(type: Delete) {
     delete rootProject.buildDir

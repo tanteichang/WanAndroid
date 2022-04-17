@@ -17,3 +17,7 @@ rootProject.name = "WanAndroid"
 include ':app'
 include ':views'
 include ':common'
+include ':modules:collection'
+include ':modules:home'
+include ':modulesBase:libBase'
+include ':modules:login'

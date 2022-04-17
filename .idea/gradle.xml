@@ -12,6 +12,12 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/common" />
+            <option value="$PROJECT_DIR$/modules" />
+            <option value="$PROJECT_DIR$/modules/collection" />
+            <option value="$PROJECT_DIR$/modules/home" />
+            <option value="$PROJECT_DIR$/modules/login" />
+            <option value="$PROJECT_DIR$/modulesBase" />
+            <option value="$PROJECT_DIR$/modulesBase/libBase" />
             <option value="$PROJECT_DIR$/views" />
           </set>
         </option>

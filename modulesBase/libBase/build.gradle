@@ -1,0 +1,54 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
+
+def cfg = rootProject.ext;
+
+android {
+    compileSdk cfg.android.compileSdk
+
+    defaultConfig {
+        minSdk cfg.android.minSdk
+        targetSdk cfg.android.targetSdk
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    api cfg.dependenciesAndroid.core
+    api cfg.dependenciesAndroid.appcompat
+    api cfg.dependenciesAndroid.constraintlayout
+    api cfg.dependenciesAndroid.annotation
+    api cfg.dependenciesAndroid.preference
+    api cfg.dependenciesAndroid.lifecycle
+    api cfg.dependenciesAndroid['lifecycle-livedata-ktx']
+    api cfg.dependenciesAndroid['lifecycle-extensions']
+    api cfg.dependenciesAndroid.recyclerview
+    api cfg.dependenciesAndroid.swiperefreshlayout
+    api cfg.dependenciesAndroid.material
+
+    api cfg.dependenciesThirtyParty.banner
+
+
+}
